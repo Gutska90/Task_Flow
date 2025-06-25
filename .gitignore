@@ -1,0 +1,86 @@
+# Exclude nested git repositories
+taskflow-angular/
+taskflow-angular-backup/
+
+# Node modules
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# Dependency directories
+node_modules/
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Archivos de entorno
+.env.local
+.env.*.local
+
+# Directorios de dependencias
+vendor/
+
+# Archivos de IDE
+*.sublime-project
+*.sublime-workspace
+
+# Archivos de logs
+yarn-debug.log*
+yarn-error.log*
+
+# Archivos de caché
+.cache/
+.temp/
+.tmp/
+
+# Archivos de construcción
+dist/
+build/
+out/
+
+# Archivos de Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/ 

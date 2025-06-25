@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow - Perfil de Usuario</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="dashboard.html">TaskFlow</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="perfil.html">Mi Perfil</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <span class="text-light me-3" id="welcomeMessage"></span>
+                    <button class="btn btn-outline-light" onclick="userManager.logout()">
+                        <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-4">
+        <div class="row">
+            <!-- Menú lateral -->
+            <div class="col-md-3">
+                <div class="list-group">
+                    <a href="#personal" class="list-group-item list-group-item-action active" data-bs-toggle="list">
+                        <i class="bi bi-person-circle"></i> Información Personal
+                    </a>
+                    <a href="#password" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                        <i class="bi bi-key"></i> Cambiar Contraseña
+                    </a>
+                    <a href="#preferences" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                        <i class="bi bi-gear"></i> Preferencias
+                    </a>
+                </div>
+            </div>
+
+            <!-- Contenido -->
+            <div class="col-md-9">
+                <div class="tab-content">
+                    <!-- Información Personal -->
+                    <div class="tab-pane fade show active" id="personal">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Información Personal</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="personalForm" autocomplete="on">
+                                    <div class="mb-3">
+                                        <label for="profileFullName" class="form-label">Nombre Completo</label>
+                                        <input type="text" class="form-control" id="profileFullName" name="fullName" 
+                                               autocomplete="name" required minlength="3" maxlength="50"
+                                               pattern="[A-Za-zÀ-ÿ\s]+" title="Solo letras y espacios">
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="profileEmail" class="form-label">Correo Electrónico</label>
+                                        <input type="email" class="form-control" id="profileEmail" name="email" 
+                                               autocomplete="email" required readonly>
+                                        <div class="form-text">El correo electrónico no se puede modificar</div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="profileUsername" class="form-label">Usuario</label>
+                                        <input type="text" class="form-control" id="profileUsername" name="username" 
+                                               autocomplete="username" required minlength="4" maxlength="20"
+                                               pattern="[a-zA-Z0-9_]+" title="Solo letras, números y guiones bajos">
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-save"></i> Guardar Cambios
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cambiar Contraseña -->
+                    <div class="tab-pane fade" id="password">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Cambiar Contraseña</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="passwordForm" autocomplete="off">
+                                    <div class="mb-3">
+                                        <label for="currentPassword" class="form-label">Contraseña Actual</label>
+                                        <input type="password" class="form-control" id="currentPassword" 
+                                               name="currentPassword" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="newPassword" class="form-label">Nueva Contraseña</label>
+                                        <input type="password" class="form-control" id="newPassword" 
+                                               name="newPassword" required minlength="8"
+                                               pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                                               title="Mínimo 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial">
+                                        <div class="form-text">Mínimo 8 caracteres, incluir mayúscula, minúscula, número y carácter especial</div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="confirmNewPassword" class="form-label">Confirmar Nueva Contraseña</label>
+                                        <input type="password" class="form-control" id="confirmNewPassword" 
+                                               name="confirmNewPassword" required>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-key"></i> Cambiar Contraseña
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Preferencias -->
+                    <div class="tab-pane fade" id="preferences">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Preferencias de la Aplicación</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="preferencesForm">
+                                    <div class="mb-3">
+                                        <label class="form-label">Tema de la Aplicación</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="theme" 
+                                                   id="themeLight" value="light" checked>
+                                            <label class="form-check-label" for="themeLight">
+                                                <i class="bi bi-sun"></i> Claro
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="theme" 
+                                                   id="themeDark" value="dark">
+                                            <label class="form-check-label" for="themeDark">
+                                                <i class="bi bi-moon"></i> Oscuro
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Notificaciones</label>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" 
+                                                   id="notifyTasks" name="notifyTasks" checked>
+                                            <label class="form-check-label" for="notifyTasks">
+                                                Notificar tareas pendientes
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" 
+                                                   id="notifyDue" name="notifyDue" checked>
+                                            <label class="form-check-label" for="notifyDue">
+                                                Notificar tareas próximas a vencer
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="language" class="form-label">Idioma</label>
+                                        <select class="form-select" id="language" name="language">
+                                            <option value="es">Español</option>
+                                            <option value="en">English</option>
+                                        </select>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-save"></i> Guardar Preferencias
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mensajes de estado -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="statusToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto" id="toastTitle">Notificación</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toastMessage"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/scripts.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+</html> 

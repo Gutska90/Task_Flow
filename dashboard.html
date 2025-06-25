@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TaskFlow - Panel de Control</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"/>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <style>
+    .task-item {
+      transition: all 0.3s ease;
+    }
+    .task-item:hover {
+      background-color: #f8f9fa;
+    }
+    .priority-high { border-left: 4px solid #dc3545; }
+    .priority-medium { border-left: 4px solid #ffc107; }
+    .priority-low { border-left: 4px solid #28a745; }
+    .category-badge {
+      font-size: 0.8em;
+      padding: 0.2em 0.6em;
+    }
+    .due-date {
+      font-size: 0.85em;
+      color: #6c757d;
+    }
+    .due-date.overdue {
+      color: #dc3545;
+      font-weight: bold;
+    }
+    .task-actions {
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .task-item:hover .task-actions {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body class="bg-light">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <i class="bi bi-check2-square me-2"></i>TaskFlow
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="#" data-view="all">Todas</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-view="pending">Pendientes</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-view="completed">Completadas</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="perfil.html">
+              <i class="bi bi-person-circle me-1"></i>Mi Perfil
+            </a>
+          </li>
+        </ul>
+        <div class="d-flex align-items-center">
+          <div class="dropdown me-3">
+            <button class="btn btn-outline-light dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown">
+              Ordenar por
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="#" data-sort="date">Fecha</a></li>
+              <li><a class="dropdown-item" href="#" data-sort="priority">Prioridad</a></li>
+              <li><a class="dropdown-item" href="#" data-sort="category">Categoría</a></li>
+            </ul>
+          </div>
+
+          <!-- Botón de notificaciones -->
+          <div class="dropdown me-3">
+            <button class="btn btn-outline-light position-relative" type="button" id="notificationDropdown" data-bs-toggle="dropdown">
+              <i class="bi bi-bell"></i>
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger notification-badge" style="display: none;">
+                0
+              </span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-end p-0" style="width: 300px;" id="notificationPanel">
+              <div class="d-flex justify-content-between align-items-center p-2 border-bottom">
+                <h6 class="mb-0">Notificaciones</h6>
+                <div>
+                  <button class="btn btn-sm btn-link text-primary" id="markAllRead">
+                    Marcar todas como leídas
+                  </button>
+                  <button class="btn btn-sm btn-link text-danger" id="clearNotifications">
+                    Limpiar todo
+                  </button>
+                </div>
+              </div>
+              <div id="notificationContent" style="max-height: 400px; overflow-y: auto;">
+                <!-- Las notificaciones se agregarán aquí dinámicamente -->
+              </div>
+            </div>
+          </div>
+
+          <span class="text-white me-3" id="welcomeUser"></span>
+          <button id="logoutButton" class="btn btn-outline-light">
+            <i class="bi bi-box-arrow-right me-1"></i>Cerrar Sesión
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="card shadow-sm mb-4">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h3 class="card-title mb-0">Mis Tareas</h3>
+              <div class="d-flex gap-2">
+                <!-- Botones de exportación/importación -->
+                <div class="dropdown">
+                  <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <i class="bi bi-download"></i> Exportar
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="#" id="exportJson">
+                      <i class="bi bi-filetype-json"></i> Exportar como JSON
+                    </a></li>
+                    <li><a class="dropdown-item" href="#" id="exportCsv">
+                      <i class="bi bi-filetype-csv"></i> Exportar como CSV
+                    </a></li>
+                  </ul>
+                </div>
+                <div class="dropdown">
+                  <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <i class="bi bi-upload"></i> Importar
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-end p-2" style="width: 300px;">
+                    <li>
+                      <div class="mb-2">
+                        <label for="importFile" class="form-label small">Seleccionar archivo (JSON o CSV)</label>
+                        <input type="file" class="form-control form-control-sm" id="importFile" 
+                               accept=".json,.csv">
+                      </div>
+                      <button class="btn btn-primary btn-sm w-100" id="importBtn" disabled>
+                        <i class="bi bi-upload"></i> Importar Tareas
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+                <div class="input-group" style="max-width: 300px;">
+                  <input type="text" class="form-control" id="searchTask" placeholder="Buscar tareas...">
+                  <button class="btn btn-outline-secondary" type="button" id="clearSearch">
+                    <i class="bi bi-x"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Formulario de nueva tarea -->
+            <div class="card mb-3">
+              <div class="card-body">
+                <form id="newTaskForm" class="row g-3">
+                  <div class="col-md-6">
+                    <input type="text" class="form-control" id="newTask" placeholder="Nueva tarea..." required>
+                  </div>
+                  <div class="col-md-3">
+                    <select class="form-select" id="taskCategory" required>
+                      <option value="">Seleccionar categoría</option>
+                      <option value="trabajo">Trabajo</option>
+                      <option value="personal">Personal</option>
+                      <option value="estudio">Estudio</option>
+                      <option value="otros">Otros</option>
+                    </select>
+                  </div>
+                  <div class="col-md-3">
+                    <select class="form-select" id="taskPriority" required>
+                      <option value="">Seleccionar prioridad</option>
+                      <option value="high">Alta</option>
+                      <option value="medium">Media</option>
+                      <option value="low">Baja</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="date" class="form-control" id="taskDueDate" required>
+                  </div>
+                  <div class="col-md-6">
+                    <button type="submit" class="btn btn-primary w-100">
+                      <i class="bi bi-plus-circle me-1"></i>Agregar Tarea
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <!-- Filtros -->
+            <div class="mb-3">
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-outline-primary active" data-filter="all">Todas</button>
+                <button type="button" class="btn btn-outline-primary" data-filter="high">Alta Prioridad</button>
+                <button type="button" class="btn btn-outline-primary" data-filter="medium">Media Prioridad</button>
+                <button type="button" class="btn btn-outline-primary" data-filter="low">Baja Prioridad</button>
+              </div>
+              <div class="btn-group ms-2" role="group">
+                <button type="button" class="btn btn-outline-secondary active" data-category="all">Todas</button>
+                <button type="button" class="btn btn-outline-secondary" data-category="trabajo">Trabajo</button>
+                <button type="button" class="btn btn-outline-secondary" data-category="personal">Personal</button>
+                <button type="button" class="btn btn-outline-secondary" data-category="estudio">Estudio</button>
+                <button type="button" class="btn btn-outline-secondary" data-category="otros">Otros</button>
+              </div>
+            </div>
+
+            <!-- Lista de tareas -->
+            <div class="list-group" id="taskList">
+              <!-- Las tareas se agregarán aquí dinámicamente -->
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-4">
+        <!-- Resumen -->
+        <div class="card shadow-sm mb-4">
+          <div class="card-body">
+            <h3 class="card-title">Resumen</h3>
+            <div class="mb-3">
+              <div class="d-flex justify-content-between mb-2">
+                <span>Tareas pendientes:</span>
+                <span class="badge bg-primary" id="pendingTasks">0</span>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span>Tareas completadas:</span>
+                <span class="badge bg-success" id="completedTasks">0</span>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span>Tareas vencidas:</span>
+                <span class="badge bg-danger" id="overdueTasks">0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Estadísticas por categoría -->
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h3 class="card-title">Por Categoría</h3>
+            <div id="categoryStats">
+              <!-- Las estadísticas se agregarán aquí dinámicamente -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Edición -->
+  <div class="modal fade" id="editTaskModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Editar Tarea</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="editTaskForm">
+            <input type="hidden" id="editTaskId">
+            <div class="mb-3">
+              <label class="form-label">Tarea</label>
+              <input type="text" class="form-control" id="editTaskText" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Categoría</label>
+              <select class="form-select" id="editTaskCategory" required>
+                <option value="trabajo">Trabajo</option>
+                <option value="personal">Personal</option>
+                <option value="estudio">Estudio</option>
+                <option value="otros">Otros</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Prioridad</label>
+              <select class="form-select" id="editTaskPriority" required>
+                <option value="high">Alta</option>
+                <option value="medium">Media</option>
+                <option value="low">Baja</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Fecha de vencimiento</label>
+              <input type="date" class="form-control" id="editTaskDueDate" required>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="saveEditTask">Guardar Cambios</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/scripts.js"></script>
+  <script src="js/tasks.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/taskExport.js"></script>
+  <script>
+    // Inicializar eventos de notificaciones y exportación
+    document.addEventListener('DOMContentLoaded', () => {
+      // Eventos de notificaciones
+      const markAllReadBtn = document.getElementById('markAllRead');
+      const clearNotificationsBtn = document.getElementById('clearNotifications');
+
+      if (markAllReadBtn) {
+        markAllReadBtn.addEventListener('click', () => {
+          window.notificationManager.markAllAsRead();
+        });
+      }
+
+      if (clearNotificationsBtn) {
+        clearNotificationsBtn.addEventListener('click', () => {
+          window.notificationManager.clearAllNotifications();
+        });
+      }
+
+      // Habilitar botón de importar cuando se seleccione un archivo
+      const importFile = document.getElementById('importFile');
+      const importBtn = document.getElementById('importBtn');
+      
+      if (importFile && importBtn) {
+        importFile.addEventListener('change', () => {
+          importBtn.disabled = !importFile.files.length;
+        });
+      }
+    });
+  </script>
+</body>
+</html>
