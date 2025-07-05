@@ -1,4 +1,4 @@
-// Clase para manejar el perfil de usuario
+// Clase para manejar el perfil de usuario con integración backend
 class ProfileManager {
     constructor() {
         this.currentUser = null;
@@ -65,14 +65,34 @@ class ProfileManager {
         this.toast.show();
     }
 
-    loadUserData() {
-        // Verificar sesión
-        if (!userManager.checkSession()) {
-            window.location.href = 'index.html';
-            return;
+    async loadUserData() {
+        try {
+            if (window.authService && window.authService.isAuthenticated()) {
+                // Cargar datos del backend
+                const result = await window.authService.getCurrentUserInfo();
+                if (result.success) {
+                    this.currentUser = result.user;
+                    this.displayUserData();
+                } else {
+                    console.error('Error cargando datos del usuario:', result.error);
+                    this.loadFromLocalStorage();
+                }
+            } else {
+                // Verificar sesión local
+                if (!userManager.checkSession()) {
+                    window.location.href = 'index.html';
+                    return;
+                }
+                this.loadFromLocalStorage();
+            }
+        } catch (error) {
+            console.error('Error cargando datos del usuario:', error);
+            this.loadFromLocalStorage();
         }
+    }
 
-        // Cargar datos del usuario
+    loadFromLocalStorage() {
+        // Cargar datos del usuario desde localStorage
         const users = JSON.parse(localStorage.getItem('users') || '[]');
         this.currentUser = users.find(u => u.username === localStorage.getItem('currentUser'));
         
@@ -81,32 +101,70 @@ class ProfileManager {
             return;
         }
 
+        this.displayUserData();
+    }
+
+    displayUserData() {
         // Mostrar nombre de usuario en la barra de navegación
-        document.getElementById('welcomeMessage').textContent = `Bienvenido, ${this.currentUser.fullName}`;
+        const welcomeElement = document.getElementById('welcomeMessage') || document.getElementById('welcomeUser');
+        if (welcomeElement) {
+            welcomeElement.textContent = `Bienvenido, ${this.currentUser.name || this.currentUser.fullName}`;
+        }
 
         // Llenar formulario de información personal
-        document.getElementById('profileFullName').value = this.currentUser.fullName;
-        document.getElementById('profileEmail').value = this.currentUser.email;
-        document.getElementById('profileUsername').value = this.currentUser.username;
+        const fullNameElement = document.getElementById('profileFullName');
+        const emailElement = document.getElementById('profileEmail');
+        const usernameElement = document.getElementById('profileUsername');
+
+        if (fullNameElement) {
+            fullNameElement.value = this.currentUser.name || this.currentUser.fullName;
+        }
+        if (emailElement) {
+            emailElement.value = this.currentUser.email;
+        }
+        if (usernameElement) {
+            usernameElement.value = this.currentUser.username || this.currentUser.email.split('@')[0];
+        }
 
         // Cargar preferencias
         this.loadPreferences();
     }
 
     loadPreferences() {
-        const preferences = JSON.parse(localStorage.getItem(`preferences_${this.currentUser.username}`) || '{}');
+        let preferences = {};
+        
+        if (this.currentUser.profile && this.currentUser.profile.preferences) {
+            // Usar preferencias del backend
+            preferences = this.currentUser.profile.preferences;
+        } else {
+            // Usar preferencias de localStorage
+            const username = this.currentUser.username || this.currentUser.email;
+            preferences = JSON.parse(localStorage.getItem(`preferences_${username}`) || '{}');
+        }
         
         // Tema
         const theme = preferences.theme || 'light';
-        document.querySelector(`input[name="theme"][value="${theme}"]`).checked = true;
-        this.applyTheme(theme);
+        const themeRadio = document.querySelector(`input[name="theme"][value="${theme}"]`);
+        if (themeRadio) {
+            themeRadio.checked = true;
+            this.applyTheme(theme);
+        }
 
         // Notificaciones
-        document.getElementById('notifyTasks').checked = preferences.notifyTasks !== false;
-        document.getElementById('notifyDue').checked = preferences.notifyDue !== false;
+        const notifyTasksElement = document.getElementById('notifyTasks');
+        const notifyDueElement = document.getElementById('notifyDue');
+        if (notifyTasksElement) {
+            notifyTasksElement.checked = preferences.notifications !== false;
+        }
+        if (notifyDueElement) {
+            notifyDueElement.checked = preferences.notifyDue !== false;
+        }
 
         // Idioma
-        document.getElementById('language').value = preferences.language || 'es';
+        const languageElement = document.getElementById('language');
+        if (languageElement) {
+            languageElement.value = preferences.language || 'es';
+        }
     }
 
     applyTheme(theme) {
@@ -123,18 +181,39 @@ class ProfileManager {
 
     async updatePersonalInfo() {
         const fullName = document.getElementById('profileFullName').value.trim();
-        const username = document.getElementById('profileUsername').value.trim();
+        const bio = document.getElementById('profileBio')?.value.trim() || '';
 
-        // Validar que el nuevo nombre de usuario no esté en uso
-        if (username !== this.currentUser.username) {
-            const users = JSON.parse(localStorage.getItem('users') || '[]');
-            if (users.some(u => u.username === username)) {
-                this.showToast('El nombre de usuario ya está en uso', 'Error', 'error');
-                return;
+        try {
+            if (window.authService && window.authService.isAuthenticated()) {
+                // Actualizar en el backend
+                const result = await window.authService.updateProfile({
+                    name: fullName,
+                    bio: bio
+                });
+
+                if (result.success) {
+                    this.currentUser = result.user;
+                    this.showToast('Información personal actualizada correctamente');
+                    
+                    // Actualizar mensaje de bienvenida
+                    const welcomeElement = document.getElementById('welcomeMessage') || document.getElementById('welcomeUser');
+                    if (welcomeElement) {
+                        welcomeElement.textContent = `Bienvenido, ${fullName}`;
+                    }
+                } else {
+                    this.showToast(result.error, 'Error', 'error');
+                }
+            } else {
+                // Actualizar en localStorage
+                this.updatePersonalInfoInLocalStorage(fullName);
             }
+        } catch (error) {
+            console.error('Error actualizando información personal:', error);
+            this.updatePersonalInfoInLocalStorage(fullName);
         }
+    }
 
-        // Actualizar datos
+    updatePersonalInfoInLocalStorage(fullName) {
         const users = JSON.parse(localStorage.getItem('users') || '[]');
         const userIndex = users.findIndex(u => u.username === this.currentUser.username);
         
@@ -144,10 +223,7 @@ class ProfileManager {
         }
 
         users[userIndex].fullName = fullName;
-        users[userIndex].username = username;
-        
         localStorage.setItem('users', JSON.stringify(users));
-        localStorage.setItem('currentUser', username);
         
         this.currentUser = users[userIndex];
         document.getElementById('welcomeMessage').textContent = `Bienvenido, ${fullName}`;
@@ -160,13 +236,7 @@ class ProfileManager {
         const newPassword = document.getElementById('newPassword').value;
         const confirmPassword = document.getElementById('confirmNewPassword').value;
 
-        // Validar contraseña actual
-        if (currentPassword !== this.currentUser.password) {
-            this.showToast('La contraseña actual es incorrecta', 'Error', 'error');
-            return;
-        }
-
-        // Validar nueva contraseña
+        // Validar que las contraseñas coincidan
         if (newPassword !== confirmPassword) {
             this.showToast('Las contraseñas no coinciden', 'Error', 'error');
             return;
@@ -174,6 +244,39 @@ class ProfileManager {
 
         if (!this.validatePassword(newPassword)) {
             this.showToast('La nueva contraseña no cumple con los requisitos de seguridad', 'Error', 'error');
+            return;
+        }
+
+        try {
+            if (window.authService && window.authService.isAuthenticated()) {
+                // Actualizar contraseña en el backend
+                const result = await window.authService.changePassword({
+                    currentPassword: currentPassword,
+                    newPassword: newPassword,
+                    confirmPassword: confirmPassword
+                });
+
+                if (result.success) {
+                    // Limpiar formulario
+                    document.getElementById('passwordForm').reset();
+                    this.showToast('Contraseña actualizada correctamente');
+                } else {
+                    this.showToast(result.error, 'Error', 'error');
+                }
+            } else {
+                // Actualizar contraseña en localStorage
+                this.updatePasswordInLocalStorage(currentPassword, newPassword);
+            }
+        } catch (error) {
+            console.error('Error actualizando contraseña:', error);
+            this.updatePasswordInLocalStorage(currentPassword, newPassword);
+        }
+    }
+
+    updatePasswordInLocalStorage(currentPassword, newPassword) {
+        // Validar contraseña actual
+        if (currentPassword !== this.currentUser.password) {
+            this.showToast('La contraseña actual es incorrecta', 'Error', 'error');
             return;
         }
 
@@ -199,16 +302,40 @@ class ProfileManager {
     async updatePreferences() {
         const preferences = {
             theme: document.querySelector('input[name="theme"]:checked').value,
-            notifyTasks: document.getElementById('notifyTasks').checked,
-            notifyDue: document.getElementById('notifyDue').checked,
-            language: document.getElementById('language').value
+            language: document.getElementById('language').value,
+            notifications: document.getElementById('notifyTasks').checked,
+            notifyDue: document.getElementById('notifyDue').checked
         };
 
-        localStorage.setItem(`preferences_${this.currentUser.username}`, JSON.stringify(preferences));
+        try {
+            if (window.authService && window.authService.isAuthenticated()) {
+                // Actualizar preferencias en el backend
+                const result = await window.authService.updateProfile({
+                    preferences: preferences
+                });
+
+                if (result.success) {
+                    this.currentUser = result.user;
+                    this.applyTheme(preferences.theme);
+                    this.showToast('Preferencias actualizadas correctamente');
+                } else {
+                    this.showToast(result.error, 'Error', 'error');
+                }
+            } else {
+                // Actualizar preferencias en localStorage
+                this.updatePreferencesInLocalStorage(preferences);
+            }
+        } catch (error) {
+            console.error('Error actualizando preferencias:', error);
+            this.updatePreferencesInLocalStorage(preferences);
+        }
+    }
+
+    updatePreferencesInLocalStorage(preferences) {
+        const username = this.currentUser.username || this.currentUser.email;
+        localStorage.setItem(`preferences_${username}`, JSON.stringify(preferences));
         
-        // Aplicar cambios inmediatos
         this.applyTheme(preferences.theme);
-        
         this.showToast('Preferencias actualizadas correctamente');
     }
 
@@ -219,15 +346,27 @@ class ProfileManager {
         const hasNumbers = /\d/.test(password);
         const hasSpecialChar = /[@$!%*?&]/.test(password);
         
-        return password.length >= minLength && 
-               hasUpperCase && 
-               hasLowerCase && 
-               hasNumbers && 
-               hasSpecialChar;
+        if (password.length < minLength) {
+            return false;
+        }
+        if (!hasUpperCase) {
+            return false;
+        }
+        if (!hasLowerCase) {
+            return false;
+        }
+        if (!hasNumbers) {
+            return false;
+        }
+        if (!hasSpecialChar) {
+            return false;
+        }
+        
+        return true;
     }
 }
 
 // Inicializar el gestor de perfil cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
     window.profileManager = new ProfileManager();
 }); 

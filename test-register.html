@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Test - Registro TaskFlow</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <style>
+    body { padding: 20px; }
+    .test-section { margin-bottom: 30px; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="mb-4">Test de Funcionalidad de Registro</h1>
+    
+    <div class="test-section">
+      <h3>1. Verificar que el enlace al registro existe</h3>
+      <p>En la página de login (index.html) debe haber un botón "Crear Cuenta" que lleve a register.html</p>
+      <a href="index.html" class="btn btn-primary">Ir al Login</a>
+    </div>
+
+    <div class="test-section">
+      <h3>2. Probar el formulario de registro</h3>
+      <p>El formulario de registro debe estar en register.html con validaciones completas</p>
+      <a href="register.html" class="btn btn-success">Ir al Registro</a>
+    </div>
+
+    <div class="test-section">
+      <h3>3. Verificar funcionalidad JavaScript</h3>
+      <p>Abriendo la consola del navegador (F12) para verificar que no hay errores</p>
+      <button onclick="testUserManager()" class="btn btn-info">Test UserManager</button>
+      <div id="testResults" class="mt-3"></div>
+    </div>
+
+    <div class="test-section">
+      <h3>4. Crear usuario de prueba</h3>
+      <form id="testForm" class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Nombre Completo</label>
+          <input type="text" class="form-control" id="testFullName" value="Usuario Test" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-control" id="testEmail" value="test@example.com" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Usuario</label>
+          <input type="text" class="form-control" id="testUsername" value="testuser" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Contraseña</label>
+          <input type="password" class="form-control" id="testPassword" value="Test123!" required>
+        </div>
+        <div class="col-12">
+          <button type="submit" class="btn btn-warning">Crear Usuario de Prueba</button>
+        </div>
+      </form>
+      <div id="testFormResults" class="mt-3"></div>
+    </div>
+  </div>
+
+  <script src="js/scripts.js"></script>
+  <script>
+    function testUserManager() {
+      const results = document.getElementById('testResults');
+      results.innerHTML = '<div class="alert alert-info">Probando UserManager...</div>';
+      
+      try {
+        // Verificar que userManager existe
+        if (typeof userManager !== 'undefined') {
+          results.innerHTML += '<div class="alert alert-success">✅ userManager está definido</div>';
+          
+          // Verificar métodos
+          if (typeof userManager.addUser === 'function') {
+            results.innerHTML += '<div class="alert alert-success">✅ addUser está disponible</div>';
+          } else {
+            results.innerHTML += '<div class="alert alert-danger">❌ addUser no está disponible</div>';
+          }
+          
+          if (typeof userManager.validatePassword === 'function') {
+            results.innerHTML += '<div class="alert alert-success">✅ validatePassword está disponible</div>';
+          } else {
+            results.innerHTML += '<div class="alert alert-danger">❌ validatePassword no está disponible</div>';
+          }
+          
+          // Verificar usuarios existentes
+          const users = JSON.parse(localStorage.getItem('users') || '[]');
+          results.innerHTML += `<div class="alert alert-info">📊 Usuarios registrados: ${users.length}</div>`;
+          
+        } else {
+          results.innerHTML = '<div class="alert alert-danger">❌ userManager no está definido</div>';
+        }
+      } catch (error) {
+        results.innerHTML = `<div class="alert alert-danger">❌ Error: ${error.message}</div>`;
+      }
+    }
+
+    // Test del formulario
+    document.getElementById('testForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const results = document.getElementById('testFormResults');
+      
+      const userData = {
+        fullName: document.getElementById('testFullName').value,
+        email: document.getElementById('testEmail').value,
+        username: document.getElementById('testUsername').value,
+        password: document.getElementById('testPassword').value
+      };
+      
+      try {
+        const result = userManager.addUser(userData);
+        if (result.success) {
+          results.innerHTML = `<div class="alert alert-success">✅ ${result.message}</div>`;
+        } else {
+          results.innerHTML = `<div class="alert alert-danger">❌ ${result.message}</div>`;
+        }
+      } catch (error) {
+        results.innerHTML = `<div class="alert alert-danger">❌ Error: ${error.message}</div>`;
+      }
+    });
+
+    // Ejecutar test automáticamente al cargar
+    document.addEventListener('DOMContentLoaded', function() {
+      testUserManager();
+    });
+  </script>
+</body>
+</html> 

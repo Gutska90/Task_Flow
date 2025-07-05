@@ -1,0 +1,136 @@
+{
+  "templates": [
+    {
+      "id": 1,
+      "name": "Reunión de trabajo",
+      "description": "Preparar y asistir a una reunión de trabajo",
+      "category": "trabajo",
+      "priority": "medium",
+      "estimatedDuration": "60",
+      "checklist": [
+        "Preparar agenda",
+        "Revisar documentos necesarios",
+        "Confirmar asistencia",
+        "Tomar notas durante la reunión",
+        "Enviar resumen a los participantes"
+      ],
+      "tags": ["reunión", "trabajo", "colaboración"]
+    },
+    {
+      "id": 2,
+      "name": "Estudiar para examen",
+      "description": "Sesión de estudio para preparar un examen",
+      "category": "estudio",
+      "priority": "high",
+      "estimatedDuration": "120",
+      "checklist": [
+        "Revisar material del curso",
+        "Hacer ejercicios de práctica",
+        "Crear resúmenes",
+        "Resolver dudas con el profesor",
+        "Repasar conceptos clave"
+      ],
+      "tags": ["estudio", "examen", "aprendizaje"]
+    },
+    {
+      "id": 3,
+      "name": "Ejercicio físico",
+      "description": "Rutina de ejercicios para mantener la salud",
+      "category": "salud",
+      "priority": "medium",
+      "estimatedDuration": "45",
+      "checklist": [
+        "Calentamiento (10 min)",
+        "Ejercicios cardiovasculares (20 min)",
+        "Ejercicios de fuerza (10 min)",
+        "Enfriamiento y estiramiento (5 min)"
+      ],
+      "tags": ["salud", "ejercicio", "bienestar"]
+    },
+    {
+      "id": 4,
+      "name": "Limpieza del hogar",
+      "description": "Tareas de limpieza y organización del hogar",
+      "category": "hogar",
+      "priority": "low",
+      "estimatedDuration": "90",
+      "checklist": [
+        "Limpiar cocina",
+        "Aspirar y trapear pisos",
+        "Limpiar baños",
+        "Organizar habitaciones",
+        "Sacar la basura"
+      ],
+      "tags": ["hogar", "limpieza", "organización"]
+    },
+    {
+      "id": 5,
+      "name": "Revisión de finanzas",
+      "description": "Revisar y organizar las finanzas personales",
+      "category": "finanzas",
+      "priority": "medium",
+      "estimatedDuration": "60",
+      "checklist": [
+        "Revisar gastos del mes",
+        "Actualizar presupuesto",
+        "Pagar facturas pendientes",
+        "Revisar inversiones",
+        "Planificar gastos futuros"
+      ],
+      "tags": ["finanzas", "presupuesto", "planificación"]
+    },
+    {
+      "id": 6,
+      "name": "Proyecto personal",
+      "description": "Trabajar en un proyecto personal o hobby",
+      "category": "proyectos",
+      "priority": "low",
+      "estimatedDuration": "120",
+      "checklist": [
+        "Definir objetivos del proyecto",
+        "Investigar recursos necesarios",
+        "Crear plan de trabajo",
+        "Ejecutar primera fase",
+        "Documentar progreso"
+      ],
+      "tags": ["proyecto", "hobby", "creatividad"]
+    },
+    {
+      "id": 7,
+      "name": "Cita médica",
+      "description": "Preparar y asistir a una cita médica",
+      "category": "salud",
+      "priority": "high",
+      "estimatedDuration": "30",
+      "checklist": [
+        "Confirmar cita",
+        "Preparar documentos médicos",
+        "Llegar con anticipación",
+        "Tomar notas del diagnóstico",
+        "Programar seguimiento si es necesario"
+      ],
+      "tags": ["salud", "médico", "cita"]
+    },
+    {
+      "id": 8,
+      "name": "Compras del hogar",
+      "description": "Realizar compras para el hogar",
+      "category": "hogar",
+      "priority": "medium",
+      "estimatedDuration": "60",
+      "checklist": [
+        "Hacer lista de compras",
+        "Revisar ofertas",
+        "Comprar productos básicos",
+        "Verificar fechas de vencimiento",
+        "Organizar productos al llegar"
+      ],
+      "tags": ["hogar", "compras", "abastecimiento"]
+    }
+  ],
+  "metadata": {
+    "version": "1.0",
+    "lastUpdated": "2024-01-15",
+    "totalTemplates": 8
+  }
+} 
