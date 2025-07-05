@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskFlow - Documentación de APIs</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .code-block {
+      background-color: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 0.375rem;
+      padding: 1rem;
+      font-family: 'Courier New', monospace;
+      font-size: 0.875rem;
+    }
+    .api-endpoint {
+      background-color: #e3f2fd;
+      border-left: 4px solid #2196f3;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+    .feature-card {
+      transition: transform 0.2s;
+    }
+    .feature-card:hover {
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body class="bg-light">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+      <a class="navbar-brand" href="dashboard.html">
+        <i class="bi bi-check2-square me-2"></i>TaskFlow
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="dashboard.html">
+              <i class="bi bi-house me-1"></i>Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="api-documentation.html">
+              <i class="bi bi-file-text me-1"></i>Documentación
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h1 class="card-title">
+              <i class="bi bi-code-slash me-2"></i>Documentación de APIs Externas
+            </h1>
+            <p class="lead">TaskFlow integra múltiples fuentes de datos externas para enriquecer la experiencia del usuario.</p>
+            
+            <hr>
+
+            <h2>📊 Archivos JSON Locales</h2>
+            <p>La aplicación utiliza archivos JSON locales para proporcionar datos estructurados:</p>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <div class="card feature-card h-100">
+                  <div class="card-body">
+                    <h5 class="card-title">
+                      <i class="bi bi-tags text-primary"></i> Categorías
+                    </h5>
+                    <p class="card-text">Definición de categorías de tareas con metadatos.</p>
+                    <div class="api-endpoint">
+                      <strong>Archivo:</strong> <code>data/categories.json</code><br>
+                      <strong>Estructura:</strong> Array de categorías con iconos y colores
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <div class="card feature-card h-100">
+                  <div class="card-body">
+                    <h5 class="card-title">
+                      <i class="bi bi-file-earmark-text text-success"></i> Plantillas
+                    </h5>
+                    <p class="card-text">Plantillas predefinidas para crear tareas rápidamente.</p>
+                    <div class="api-endpoint">
+                      <strong>Archivo:</strong> <code>data/taskTemplates.json</code><br>
+                      <strong>Estructura:</strong> Array de plantillas con checklists
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <div class="card feature-card h-100">
+                  <div class="card-body">
+                    <h5 class="card-title">
+                      <i class="bi bi-graph-up text-info"></i> Estadísticas
+                    </h5>
+                    <p class="card-text">Datos estadísticos y métricas de productividad.</p>
+                    <div class="api-endpoint">
+                      <strong>Archivo:</strong> <code>data/statistics.json</code><br>
+                      <strong>Estructura:</strong> Estadísticas globales y por categoría
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <h2>🌐 APIs Simuladas</h2>
+            <p>Para demostrar la integración con APIs externas, se han implementado servicios simulados:</p>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <div class="card feature-card h-100">
+                  <div class="card-body">
+                    <h5 class="card-title">
+                      <i class="bi bi-cloud-sun text-warning"></i> API del Clima
+                    </h5>
+                    <p class="card-text">Simulación de una API de clima (equivalente a OpenWeatherMap).</p>
+                    <div class="api-endpoint">
+                      <strong>Método:</strong> <code>getWeatherData(city)</code><br>
+                      <strong>Retorna:</strong> Temperatura, condición, humedad
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <div class="card feature-card h-100">
+                  <div class="card-body">
+                    <h5 class="card-title">
+                      <i class="bi bi-newspaper text-danger"></i> API de Noticias
+                    </h5>
+                    <p class="card-text">Simulación de una API de noticias (equivalente a NewsAPI).</p>
+                    <div class="api-endpoint">
+                      <strong>Método:</strong> <code>getNewsData(category)</code><br>
+                      <strong>Retorna:</strong> Artículos de productividad
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <h2>🔧 Servicio API</h2>
+            <p>El <code>ApiService</code> centraliza todas las operaciones de datos externos:</p>
+
+            <div class="code-block">
+<pre>class ApiService {
+  constructor() {
+    this.baseUrl = './data/';
+    this.cache = new Map();
+    this.cacheTimeout = 5 * 60 * 1000; // 5 minutos
+  }
+
+  // Métodos principales:
+  async getCategories()        // Obtener categorías
+  async getTaskTemplates()     // Obtener plantillas
+  async getStatistics()        // Obtener estadísticas
+  async getWeatherData()       // Obtener clima
+  async getNewsData()          // Obtener noticias
+}</pre>
+            </div>
+
+            <h2>📱 Componentes Integrados</h2>
+            <p>Los siguientes componentes consumen las APIs externas:</p>
+
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <div class="card feature-card h-100">
+                  <div class="card-body text-center">
+                    <i class="bi bi-file-earmark-text display-4 text-primary mb-3"></i>
+                    <h5>TaskTemplatesManager</h5>
+                    <p class="small">Gestiona plantillas de tareas con filtros y búsqueda</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <div class="card feature-card h-100">
+                  <div class="card-body text-center">
+                    <i class="bi bi-graph-up display-4 text-success mb-3"></i>
+                    <h5>StatisticsManager</h5>
+                    <p class="small">Muestra estadísticas detalladas y logros</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <div class="card feature-card h-100">
+                  <div class="card-body text-center">
+                    <i class="bi bi-window-stack display-4 text-info mb-3"></i>
+                    <h5>ExternalWidgetsManager</h5>
+                    <p class="small">Maneja widgets de clima y noticias</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <h2>🚀 Características Implementadas</h2>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <i class="bi bi-check-circle text-success me-2"></i>
+                <strong>Caché inteligente:</strong> Los datos se almacenan en caché por 5 minutos
+              </li>
+              <li class="list-group-item">
+                <i class="bi bi-check-circle text-success me-2"></i>
+                <strong>Manejo de errores:</strong> Gestión robusta de errores de red
+              </li>
+              <li class="list-group-item">
+                <i class="bi bi-check-circle text-success me-2"></i>
+                <strong>Actualización automática:</strong> Los widgets se actualizan cada 5 minutos
+              </li>
+              <li class="list-group-item">
+                <i class="bi bi-check-circle text-success me-2"></i>
+                <strong>Filtros avanzados:</strong> Búsqueda y filtrado por categoría y prioridad
+              </li>
+              <li class="list-group-item">
+                <i class="bi bi-check-circle text-success me-2"></i>
+                <strong>Exportación de datos:</strong> Los usuarios pueden exportar estadísticas
+              </li>
+              <li class="list-group-item">
+                <i class="bi bi-check-circle text-success me-2"></i>
+                <strong>Interfaz responsiva:</strong> Diseño adaptativo para todos los dispositivos
+              </li>
+            </ul>
+
+            <h2>🔗 Integración con APIs Reales</h2>
+            <p>Para integrar APIs reales, simplemente reemplaza los métodos simulados:</p>
+
+            <div class="code-block">
+<pre>// Ejemplo: Integración con OpenWeatherMap
+async getWeatherData(city) {
+  const apiKey = 'TU_API_KEY';
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+  
+  const response = await fetch(url);
+  const data = await response.json();
+  
+  return {
+    success: true,
+    data: {
+      city: data.name,
+      temperature: Math.round(data.main.temp),
+      condition: data.weather[0].main,
+      humidity: data.main.humidity,
+      timestamp: new Date().toISOString()
+    }
+  };
+}</pre>
+            </div>
+
+            <h2>📋 Estructura de Archivos</h2>
+            <div class="code-block">
+<pre>Task_Flow/
+├── data/
+│   ├── categories.json      # Categorías de tareas
+│   ├── taskTemplates.json   # Plantillas predefinidas
+│   └── statistics.json      # Datos estadísticos
+├── js/
+│   ├── apiService.js        # Servicio principal de APIs
+│   ├── taskTemplates.js     # Gestor de plantillas
+│   ├── statistics.js        # Gestor de estadísticas
+│   └── externalWidgets.js   # Widgets externos
+└── dashboard.html           # Página principal con integración</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="card shadow-sm mb-4">
+          <div class="card-body">
+            <h5 class="card-title">
+              <i class="bi bi-info-circle me-2"></i>Información del Proyecto
+            </h5>
+            <p class="card-text">Esta documentación describe la integración de APIs externas en TaskFlow, desarrollada para la actividad formativa N°5.</p>
+            <hr>
+            <div class="d-grid gap-2">
+              <a href="dashboard.html" class="btn btn-primary">
+                <i class="bi bi-arrow-left me-1"></i>Volver al Dashboard
+              </a>
+              <button class="btn btn-outline-secondary" onclick="window.print()">
+                <i class="bi bi-printer me-1"></i>Imprimir Documentación
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+          <div class="card-body">
+            <h5 class="card-title">
+              <i class="bi bi-gear me-2"></i>Configuración
+            </h5>
+            <ul class="list-unstyled">
+              <li><i class="bi bi-clock me-2"></i>Cache: 5 minutos</li>
+              <li><i class="bi bi-arrow-clockwise me-2"></i>Auto-refresh: 5 minutos</li>
+              <li><i class="bi bi-file-earmark-json me-2"></i>3 archivos JSON</li>
+              <li><i class="bi bi-window-stack me-2"></i>2 APIs simuladas</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">
+              <i class="bi bi-lightbulb me-2"></i>Próximas Mejoras
+            </h5>
+            <ul class="list-unstyled">
+              <li><i class="bi bi-plus-circle me-2"></i>Integración con APIs reales</li>
+              <li><i class="bi bi-graph-up me-2"></i>Gráficos interactivos</li>
+              <li><i class="bi bi-share me-2"></i>Compartir en redes sociales</li>
+              <li><i class="bi bi-bell me-2"></i>Notificaciones push</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-dark text-light py-4 mt-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h5>TaskFlow</h5>
+          <p class="mb-0">Sistema de gestión de tareas con integración de APIs externas</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <p class="mb-0">Actividad Formativa N°5 - Integrando APIs Externas</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

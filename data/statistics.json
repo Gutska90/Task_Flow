@@ -1,0 +1,168 @@
+{
+  "statistics": {
+    "global": {
+      "totalTasks": 1250,
+      "completedTasks": 890,
+      "pendingTasks": 360,
+      "overdueTasks": 45,
+      "completionRate": 71.2,
+      "averageCompletionTime": "2.3",
+      "mostProductiveDay": "martes",
+      "mostProductiveHour": "10:00"
+    },
+    "byCategory": [
+      {
+        "category": "trabajo",
+        "total": 450,
+        "completed": 320,
+        "pending": 130,
+        "overdue": 15,
+        "completionRate": 71.1,
+        "averageTime": "3.2"
+      },
+      {
+        "category": "personal",
+        "total": 300,
+        "completed": 220,
+        "pending": 80,
+        "overdue": 10,
+        "completionRate": 73.3,
+        "averageTime": "1.8"
+      },
+      {
+        "category": "estudio",
+        "total": 250,
+        "completed": 180,
+        "pending": 70,
+        "overdue": 8,
+        "completionRate": 72.0,
+        "averageTime": "4.1"
+      },
+      {
+        "category": "salud",
+        "total": 150,
+        "completed": 120,
+        "pending": 30,
+        "overdue": 5,
+        "completionRate": 80.0,
+        "averageTime": "1.2"
+      },
+      {
+        "category": "finanzas",
+        "total": 100,
+        "completed": 50,
+        "pending": 50,
+        "overdue": 7,
+        "completionRate": 50.0,
+        "averageTime": "2.5"
+      }
+    ],
+    "byPriority": [
+      {
+        "priority": "high",
+        "total": 200,
+        "completed": 150,
+        "pending": 50,
+        "overdue": 20,
+        "completionRate": 75.0
+      },
+      {
+        "priority": "medium",
+        "total": 600,
+        "completed": 420,
+        "pending": 180,
+        "overdue": 15,
+        "completionRate": 70.0
+      },
+      {
+        "priority": "low",
+        "total": 450,
+        "completed": 320,
+        "pending": 130,
+        "overdue": 10,
+        "completionRate": 71.1
+      }
+    ],
+    "trends": {
+      "weekly": [
+        {
+          "week": "2024-01-01",
+          "tasksCreated": 25,
+          "tasksCompleted": 22,
+          "completionRate": 88.0
+        },
+        {
+          "week": "2024-01-08",
+          "tasksCreated": 30,
+          "tasksCompleted": 28,
+          "completionRate": 93.3
+        },
+        {
+          "week": "2024-01-15",
+          "tasksCreated": 28,
+          "tasksCompleted": 25,
+          "completionRate": 89.3
+        }
+      ],
+      "monthly": [
+        {
+          "month": "2024-01",
+          "tasksCreated": 120,
+          "tasksCompleted": 105,
+          "completionRate": 87.5
+        },
+        {
+          "month": "2023-12",
+          "tasksCreated": 110,
+          "tasksCompleted": 95,
+          "completionRate": 86.4
+        },
+        {
+          "month": "2023-11",
+          "tasksCreated": 100,
+          "tasksCompleted": 85,
+          "completionRate": 85.0
+        }
+      ]
+    },
+    "achievements": [
+      {
+        "id": 1,
+        "name": "Productividad Máxima",
+        "description": "Completar 10 tareas en un día",
+        "icon": "bi-trophy",
+        "unlocked": true,
+        "date": "2024-01-10"
+      },
+      {
+        "id": 2,
+        "name": "Consistencia",
+        "description": "Completar tareas por 7 días consecutivos",
+        "icon": "bi-calendar-check",
+        "unlocked": true,
+        "date": "2024-01-15"
+      },
+      {
+        "id": 3,
+        "name": "Organizador",
+        "description": "Crear 50 tareas organizadas por categorías",
+        "icon": "bi-folder-check",
+        "unlocked": false,
+        "progress": 35
+      },
+      {
+        "id": 4,
+        "name": "Puntualidad",
+        "description": "Completar 20 tareas antes de su fecha límite",
+        "icon": "bi-clock-history",
+        "unlocked": false,
+        "progress": 15
+      }
+    ]
+  },
+  "metadata": {
+    "version": "1.0",
+    "lastUpdated": "2024-01-15",
+    "dataSource": "TaskFlow Analytics"
+  }
+} 

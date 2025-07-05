@@ -221,7 +221,13 @@ document.addEventListener('DOMContentLoaded', function() {
   
   if (currentPage === 'dashboard.html') {
     console.log('Verificando sesión en dashboard');
-    if (!userManager.checkSession()) {
+    
+    // Verificar sesión con el backend primero
+    if (window.authService && window.authService.isAuthenticated()) {
+      console.log('Sesión backend válida');
+      // Verificar si el token está próximo a expirar
+      window.authService.refreshTokenIfNeeded();
+    } else if (!userManager.checkSession()) {
       console.log('No hay sesión activa, redirigiendo a login');
       redirect('index.html');
       return;
@@ -247,38 +253,70 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Formulario de login encontrado');
     
     // Función de login optimizada
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
       e.preventDefault();
       
       // Deshabilitar el botón para evitar múltiples envíos
       loginButton.disabled = true;
       
-      const username = document.getElementById('username').value.trim();
+      const email = document.getElementById('username').value.trim(); // Usar email en lugar de username
       const password = document.getElementById('password').value;
       
-      if (!username || !password) {
+      if (!email || !password) {
         showError('loginError', 'Todos los campos son obligatorios.');
         loginButton.disabled = false;
         return;
       }
       
-      // Usar setTimeout para evitar bloqueo de la UI
-      setTimeout(() => {
-        try {
-          const result = userManager.login(username, password);
+      // Mostrar loading
+      const originalText = loginButton.textContent;
+      loginButton.textContent = 'Iniciando sesión...';
+      
+      try {
+        // Intentar login con el backend
+        if (window.authService) {
+          const credentials = { email, password };
+          const validation = window.authService.validateLoginData(credentials);
+          
+          if (!validation.isValid) {
+            const firstError = Object.values(validation.errors)[0];
+            showError('loginError', firstError);
+            loginButton.disabled = false;
+            return;
+          }
+          
+          const result = await window.authService.login(credentials);
+          
+          if (result.success) {
+            showError('loginError', result.message, 'success');
+            setTimeout(() => {
+              window.location.href = 'dashboard.html';
+            }, 1000);
+          } else {
+            showError('loginError', result.error);
+            loginButton.disabled = false;
+          }
+        } else {
+          // Fallback al sistema local
+          const result = userManager.login(email, password);
           if (result) {
-            // Mostrar mensaje de éxito
             showError('loginError', 'Inicio de sesión exitoso', 'success');
+            setTimeout(() => {
+              window.location.href = 'dashboard.html';
+            }, 1000);
           } else {
             showError('loginError', 'Usuario o contraseña incorrectos.');
             loginButton.disabled = false;
           }
-        } catch (error) {
-          console.error('Error en login:', error);
-          showError('loginError', 'Error al iniciar sesión. Por favor, intente nuevamente.');
-          loginButton.disabled = false;
         }
-      }, 0);
+      } catch (error) {
+        console.error('Error en login:', error);
+        showError('loginError', 'Error de conexión. Intente de nuevo.');
+        loginButton.disabled = false;
+      } finally {
+        // Restaurar botón
+        loginButton.textContent = originalText;
+      }
     };
 
     // Agregar el manejador de eventos al botón en lugar del formulario
@@ -295,7 +333,7 @@ document.addEventListener('DOMContentLoaded', function() {
   if (registerForm && registerButton) {
     console.log('Formulario de registro encontrado');
     
-    const handleRegister = (e) => {
+    const handleRegister = async (e) => {
       e.preventDefault();
       
       // Deshabilitar el botón para evitar múltiples envíos
@@ -303,13 +341,12 @@ document.addEventListener('DOMContentLoaded', function() {
       
       const fullName = document.getElementById('fullName').value.trim();
       const email = document.getElementById('email').value.trim();
-      const username = document.getElementById('username').value.trim();
       const password = document.getElementById('password').value;
       const confirmPassword = document.getElementById('confirmPassword').value;
       const termsAccepted = document.getElementById('termsCheck').checked;
       
       // Validar que todos los campos estén completos
-      if (!fullName || !email || !username || !password || !confirmPassword) {
+      if (!fullName || !email || !password || !confirmPassword) {
         showError('registerError', 'Todos los campos son obligatorios.');
         registerButton.disabled = false;
         return;
@@ -329,31 +366,69 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
       }
 
-      // Intentar registrar el usuario
-      try {
-        const result = userManager.addUser({
-          fullName,
-          email,
-          username,
-          password
-        });
+      // Preparar datos para el backend
+      const userData = {
+        name: fullName,
+        email: email,
+        password: password,
+        confirmPassword: confirmPassword
+      };
 
-        if (result.success) {
-          // Mostrar mensaje de éxito
-          showError('registerError', result.message, 'success');
-          
-          // Redirigir al login después de 2 segundos
-          setTimeout(() => {
-            window.location.href = 'index.html';
-          }, 2000);
-        } else {
-          showError('registerError', result.message);
+      // Validar datos usando el servicio de autenticación
+      if (window.authService) {
+        const validation = window.authService.validateRegistrationData(userData);
+        if (!validation.isValid) {
+          const firstError = Object.values(validation.errors)[0];
+          showError('registerError', firstError);
           registerButton.disabled = false;
+          return;
+        }
+      }
+
+      // Mostrar loading
+      const originalText = registerButton.textContent;
+      registerButton.textContent = 'Registrando...';
+
+      try {
+        // Intentar registrar usuario con el backend
+        if (window.authService) {
+          const result = await window.authService.register(userData);
+          
+          if (result.success) {
+            showError('registerError', result.message, 'success');
+            setTimeout(() => {
+              window.location.href = 'dashboard.html';
+            }, 2000);
+          } else {
+            showError('registerError', result.error);
+            registerButton.disabled = false;
+          }
+        } else {
+          // Fallback al sistema local
+          const result = userManager.addUser({
+            fullName,
+            email,
+            username: email.split('@')[0], // Usar email como username
+            password
+          });
+
+          if (result.success) {
+            showError('registerError', result.message, 'success');
+            setTimeout(() => {
+              window.location.href = 'index.html';
+            }, 2000);
+          } else {
+            showError('registerError', result.message);
+            registerButton.disabled = false;
+          }
         }
       } catch (error) {
         console.error('Error en registro:', error);
-        showError('registerError', 'Error al registrar usuario. Por favor, intente nuevamente.');
+        showError('registerError', 'Error de conexión. Intente de nuevo.');
         registerButton.disabled = false;
+      } finally {
+        // Restaurar botón
+        registerButton.textContent = originalText;
       }
     };
 
@@ -385,10 +460,22 @@ document.addEventListener('DOMContentLoaded', function() {
   if (logoutButton) {
     console.log('Botón de logout encontrado');
     
-    logoutButton.onclick = function(e) {
+    logoutButton.onclick = async function(e) {
       e.preventDefault();
       console.log('Cerrando sesión');
-      userManager.logout();
+      
+      try {
+        if (window.authService) {
+          await window.authService.logout();
+        } else {
+          userManager.logout();
+        }
+      } catch (error) {
+        console.error('Error en logout:', error);
+        // Limpiar datos locales de todas formas
+        localStorage.removeItem('currentUser');
+        window.location.href = 'index.html';
+      }
     };
   }
 });

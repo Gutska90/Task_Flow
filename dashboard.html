@@ -59,6 +59,16 @@
             <a class="nav-link" href="#" data-view="completed">Completadas</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#statisticsModal">
+              <i class="bi bi-graph-up me-1"></i>Estadísticas
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="api-documentation.html">
+              <i class="bi bi-file-text me-1"></i>Documentación
+            </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="perfil.html">
               <i class="bi bi-person-circle me-1"></i>Mi Perfil
             </a>
@@ -119,6 +129,11 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
               <h3 class="card-title mb-0">Mis Tareas</h3>
               <div class="d-flex gap-2">
+                <!-- Botón de plantillas -->
+                <button class="btn btn-outline-success" type="button" data-bs-toggle="modal" data-bs-target="#templatesModal">
+                  <i class="bi bi-file-earmark-text"></i> Plantillas
+                </button>
+                
                 <!-- Botones de exportación/importación -->
                 <div class="dropdown">
                   <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
@@ -243,11 +258,45 @@
         </div>
 
         <!-- Estadísticas por categoría -->
-        <div class="card shadow-sm">
+        <div class="card shadow-sm mb-4">
           <div class="card-body">
             <h3 class="card-title">Por Categoría</h3>
             <div id="categoryStats">
               <!-- Las estadísticas se agregarán aquí dinámicamente -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Widget de clima (ejemplo de API externa) -->
+        <div class="card shadow-sm mb-4">
+          <div class="card-body">
+            <h3 class="card-title">
+              <i class="bi bi-cloud-sun me-2"></i>Clima
+            </h3>
+            <div id="weatherWidget">
+              <div class="text-center py-3">
+                <div class="spinner-border spinner-border-sm text-primary" role="status">
+                  <span class="visually-hidden">Cargando...</span>
+                </div>
+                <p class="small text-muted mt-2">Cargando información del clima...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Widget de noticias (ejemplo de API externa) -->
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h3 class="card-title">
+              <i class="bi bi-newspaper me-2"></i>Noticias de Productividad
+            </h3>
+            <div id="newsWidget">
+              <div class="text-center py-3">
+                <div class="spinner-border spinner-border-sm text-primary" role="status">
+                  <span class="visually-hidden">Cargando...</span>
+                </div>
+                <p class="small text-muted mt-2">Cargando noticias...</p>
+              </div>
             </div>
           </div>
         </div>
@@ -301,12 +350,136 @@
     </div>
   </div>
 
+  <!-- Modal de Plantillas -->
+  <div class="modal fade" id="templatesModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="bi bi-file-earmark-text me-2"></i>Plantillas de Tareas
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Filtros y búsqueda -->
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="input-group">
+                <input type="text" class="form-control" id="templateSearch" placeholder="Buscar plantillas...">
+                <button class="btn btn-outline-secondary" type="button" id="clearTemplateSearch">
+                  <i class="bi bi-x"></i>
+                </button>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="d-flex gap-2">
+                <button class="btn btn-outline-primary btn-sm" id="reloadTemplates">
+                  <i class="bi bi-arrow-clockwise"></i> Recargar
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filtros de prioridad -->
+          <div class="mb-3">
+            <label class="form-label small">Filtrar por prioridad:</label>
+            <div class="btn-group btn-group-sm" role="group">
+              <button type="button" class="btn btn-outline-primary active" data-template-filter="all">Todas</button>
+              <button type="button" class="btn btn-outline-danger" data-template-filter="high">Alta</button>
+              <button type="button" class="btn btn-outline-warning" data-template-filter="medium">Media</button>
+              <button type="button" class="btn btn-outline-success" data-template-filter="low">Baja</button>
+            </div>
+          </div>
+
+          <!-- Filtros de categoría -->
+          <div class="mb-3">
+            <label class="form-label small">Filtrar por categoría:</label>
+            <div class="btn-group btn-group-sm" role="group">
+              <button type="button" class="btn btn-outline-secondary active" data-template-category="all">Todas</button>
+              <button type="button" class="btn btn-outline-secondary" data-template-category="trabajo">Trabajo</button>
+              <button type="button" class="btn btn-outline-secondary" data-template-category="personal">Personal</button>
+              <button type="button" class="btn btn-outline-secondary" data-template-category="estudio">Estudio</button>
+              <button type="button" class="btn btn-outline-secondary" data-template-category="salud">Salud</button>
+              <button type="button" class="btn btn-outline-secondary" data-template-category="finanzas">Finanzas</button>
+              <button type="button" class="btn btn-outline-secondary" data-template-category="hogar">Hogar</button>
+              <button type="button" class="btn btn-outline-secondary" data-template-category="proyectos">Proyectos</button>
+            </div>
+          </div>
+
+          <!-- Contenedor de plantillas -->
+          <div class="row" id="templatesContainer">
+            <!-- Las plantillas se cargarán aquí dinámicamente -->
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Estadísticas -->
+  <div class="modal fade" id="statisticsModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="bi bi-graph-up me-2"></i>Estadísticas Detalladas
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Navegación de vistas -->
+          <div class="mb-3">
+            <div class="btn-group" role="group">
+              <button type="button" class="btn btn-outline-primary active" data-stats-view="overview">
+                <i class="bi bi-house me-1"></i>General
+              </button>
+              <button type="button" class="btn btn-outline-primary" data-stats-view="categories">
+                <i class="bi bi-tags me-1"></i>Por Categoría
+              </button>
+              <button type="button" class="btn btn-outline-primary" data-stats-view="trends">
+                <i class="bi bi-graph-up me-1"></i>Tendencias
+              </button>
+              <button type="button" class="btn btn-outline-primary" data-stats-view="achievements">
+                <i class="bi bi-trophy me-1"></i>Logros
+              </button>
+            </div>
+            <div class="float-end">
+              <button class="btn btn-outline-success btn-sm me-2" id="exportStatistics">
+                <i class="bi bi-download"></i> Exportar
+              </button>
+              <button class="btn btn-outline-primary btn-sm" id="reloadStatistics">
+                <i class="bi bi-arrow-clockwise"></i> Recargar
+              </button>
+            </div>
+          </div>
+
+          <!-- Contenedor de estadísticas -->
+          <div id="statisticsContainer">
+            <!-- Las estadísticas se cargarán aquí dinámicamente -->
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="js/scripts.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/authService.js"></script>
+    <script src="js/scripts.js"></script>
   <script src="js/tasks.js"></script>
   <script src="js/notifications.js"></script>
   <script src="js/taskExport.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/logger.js"></script>
+  <script src="js/apiService.js"></script>
+  <script src="js/taskTemplates.js"></script>
+  <script src="js/statistics.js"></script>
+  <script src="js/externalWidgets.js"></script>
   <script>
     // Inicializar eventos de notificaciones y exportación
     document.addEventListener('DOMContentLoaded', () => {

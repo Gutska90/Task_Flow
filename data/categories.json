@@ -1,0 +1,73 @@
+{
+  "categories": [
+    {
+      "id": 1,
+      "name": "Trabajo",
+      "description": "Tareas relacionadas con el trabajo profesional",
+      "icon": "bi-briefcase",
+      "color": "#007bff",
+      "priority": 1
+    },
+    {
+      "id": 2,
+      "name": "Personal",
+      "description": "Tareas personales y de la vida diaria",
+      "icon": "bi-person",
+      "color": "#28a745",
+      "priority": 2
+    },
+    {
+      "id": 3,
+      "name": "Estudio",
+      "description": "Tareas académicas y de aprendizaje",
+      "icon": "bi-book",
+      "color": "#ffc107",
+      "priority": 3
+    },
+    {
+      "id": 4,
+      "name": "Salud",
+      "description": "Tareas relacionadas con la salud y el bienestar",
+      "icon": "bi-heart",
+      "color": "#dc3545",
+      "priority": 4
+    },
+    {
+      "id": 5,
+      "name": "Finanzas",
+      "description": "Tareas relacionadas con el manejo de dinero",
+      "icon": "bi-cash-coin",
+      "color": "#6f42c1",
+      "priority": 5
+    },
+    {
+      "id": 6,
+      "name": "Hogar",
+      "description": "Tareas domésticas y de mantenimiento",
+      "icon": "bi-house",
+      "color": "#fd7e14",
+      "priority": 6
+    },
+    {
+      "id": 7,
+      "name": "Proyectos",
+      "description": "Proyectos personales y creativos",
+      "icon": "bi-lightbulb",
+      "color": "#20c997",
+      "priority": 7
+    },
+    {
+      "id": 8,
+      "name": "Otros",
+      "description": "Otras tareas que no encajan en las categorías principales",
+      "icon": "bi-three-dots",
+      "color": "#6c757d",
+      "priority": 8
+    }
+  ],
+  "metadata": {
+    "version": "1.0",
+    "lastUpdated": "2024-01-15",
+    "totalCategories": 8
+  }
+} 
