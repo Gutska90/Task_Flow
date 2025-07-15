@@ -1,0 +1,7 @@
+e92e000f2f2e366951ffe39fbff4243dc3c7c633 commit	refs/heads/luis_dev
+3f8c9c28a82ea67e96ce04aa3d38211ef5f7522e commit	refs/heads/main
+102bde6f2b0ed61869ad00ab2022c87cc6d47bd3 commit	refs/original/refs/heads/luis_dev
+102bde6f2b0ed61869ad00ab2022c87cc6d47bd3 commit	refs/original/refs/heads/main
+83a787c2fd9802c2e33393664118d50e96cc8fda commit	refs/remotes/origin/HEAD
+83a787c2fd9802c2e33393664118d50e96cc8fda commit	refs/remotes/origin/luis_dev
+c598314cf47051a0b2b30b0b079bac77ae1885ba commit	refs/remotes/origin/main
