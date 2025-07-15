@@ -1,4 +1,41 @@
 {
-  "users": [],
-  "lastId": 0
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "email": "admin@taskflow.com",
+      "password": "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi",
+      "role": "admin",
+      "firstName": "Administrador",
+      "lastName": "Sistema",
+      "createdAt": "2024-01-15T10:00:00.000Z",
+      "lastLogin": "2024-12-19T15:30:00.000Z",
+      "isActive": true
+    },
+    {
+      "id": 2,
+      "username": "usuario1",
+      "email": "usuario1@taskflow.com",
+      "password": "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi",
+      "role": "client",
+      "firstName": "Juan",
+      "lastName": "Pérez",
+      "createdAt": "2024-01-16T09:00:00.000Z",
+      "lastLogin": "2024-12-19T14:20:00.000Z",
+      "isActive": true
+    },
+    {
+      "id": 3,
+      "username": "usuario2",
+      "email": "usuario2@taskflow.com",
+      "password": "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi",
+      "role": "client",
+      "firstName": "María",
+      "lastName": "García",
+      "createdAt": "2024-01-17T11:00:00.000Z",
+      "lastLogin": "2024-12-19T13:45:00.000Z",
+      "isActive": true
+    }
+  ],
+  "lastId": 3
 } 

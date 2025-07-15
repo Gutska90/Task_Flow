@@ -1,4 +1,80 @@
 {
-  "tasks": [],
-  "lastId": 0
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Completar documentación del proyecto",
+      "description": "Finalizar la documentación técnica del proyecto TaskFlow para la presentación",
+      "categoryId": 1,
+      "priority": "high",
+      "status": "in-progress",
+      "dueDate": "2024-12-25T23:59:59.000Z",
+      "createdAt": "2024-12-15T10:00:00.000Z",
+      "updatedAt": "2024-12-19T15:30:00.000Z",
+      "userId": 2,
+      "tags": ["documentación", "proyecto"],
+      "estimatedHours": 8,
+      "actualHours": 4
+    },
+    {
+      "id": 2,
+      "title": "Revisar código de autenticación",
+      "description": "Revisar y optimizar el código del sistema de autenticación",
+      "categoryId": 1,
+      "priority": "medium",
+      "status": "pending",
+      "dueDate": "2024-12-22T23:59:59.000Z",
+      "createdAt": "2024-12-16T09:00:00.000Z",
+      "updatedAt": "2024-12-16T09:00:00.000Z",
+      "userId": 2,
+      "tags": ["código", "seguridad"],
+      "estimatedHours": 4,
+      "actualHours": 0
+    },
+    {
+      "id": 3,
+      "title": "Ejercicio matutino",
+      "description": "Realizar 30 minutos de ejercicio cardiovascular",
+      "categoryId": 4,
+      "priority": "medium",
+      "status": "completed",
+      "dueDate": "2024-12-19T08:00:00.000Z",
+      "createdAt": "2024-12-18T07:00:00.000Z",
+      "updatedAt": "2024-12-19T08:30:00.000Z",
+      "userId": 3,
+      "tags": ["salud", "ejercicio"],
+      "estimatedHours": 0.5,
+      "actualHours": 0.5
+    },
+    {
+      "id": 4,
+      "title": "Estudiar Angular avanzado",
+      "description": "Completar el curso de Angular avanzado en la plataforma de aprendizaje",
+      "categoryId": 3,
+      "priority": "high",
+      "status": "pending",
+      "dueDate": "2024-12-30T23:59:59.000Z",
+      "createdAt": "2024-12-17T14:00:00.000Z",
+      "updatedAt": "2024-12-17T14:00:00.000Z",
+      "userId": 3,
+      "tags": ["angular", "estudio"],
+      "estimatedHours": 20,
+      "actualHours": 0
+    },
+    {
+      "id": 5,
+      "title": "Limpiar la casa",
+      "description": "Realizar limpieza general de la casa incluyendo baños y cocina",
+      "categoryId": 6,
+      "priority": "low",
+      "status": "pending",
+      "dueDate": "2024-12-21T18:00:00.000Z",
+      "createdAt": "2024-12-19T10:00:00.000Z",
+      "updatedAt": "2024-12-19T10:00:00.000Z",
+      "userId": 2,
+      "tags": ["hogar", "limpieza"],
+      "estimatedHours": 2,
+      "actualHours": 0
+    }
+  ],
+  "lastId": 5
 } 
